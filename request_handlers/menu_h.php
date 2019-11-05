@@ -5,7 +5,7 @@ require_once "config.php";
 
 if (isset($_SESSION["errors"])){
     trigger_error($_SESSION["errors"]["text"], $_SESSION["errors"]["type"]);
-    reset($_SESSION["errors"]);
+    unset($_SESSION["errors"]);
 }
 
 if (isset($_REQUEST['table'])){
@@ -75,6 +75,8 @@ else {
     $table_name = "";
     $mpage_data = file_get_contents("public/templates/main_page.html");
 }
+
+$sign_panel = file_get_contents("public/templates/sign_panel.html");
 
 require_once "public/templates/index2.html";
 

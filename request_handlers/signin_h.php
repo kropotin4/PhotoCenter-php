@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST'){
                     user_sessid = :sessid
                     WHERE user_id = :id";
                 $q = $db->prepare($sql);
-                $q->bindParam(":sessid", $_SESSION["PHPSESSID"]);
+                $q->bindParam(":sessid", $_COOKIE["PHPSESSID"]);
                 $q->bindParam(":id", $rows[0]["user_id"], PDO::PARAM_INT);
                 $q->execute();
 
@@ -28,14 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST'){
                 $_SESSION["errors"] = ["text" => "Неверный пароль", "type" => E_USER_ERROR];
                 header('Location: ../');
                 exit;
-                //require_once "../index.php";
             }
         }
         else {
             $_SESSION["errors"] = ["text" => "Несуществующий логин", "type" => E_USER_ERROR];
             header('Location: ../');
             exit;
-            //require_once "../index.php";
         }
     }
 }
