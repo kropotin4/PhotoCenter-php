@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" href="database.ico">
+
+    <title>Photo Center</title>
+
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.css" rel="stylesheet">
+    <link href="../public/css/alert.css" rel="stylesheet" />
+    <link href="../public/css/signup.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../public/js/alert.js"></script>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="../">Photo Center</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <form action="signup_h.php" method="POST" class="form-signin">
+        <h2 class="form-signin-heading">Please sign up</h2>
+        <label for="inputLogin" class="sr-only">Login</label>
+        <input type="text" name="login" id="inputLogin" class="form-control" placeholder="Login" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+      </form>
+    </div> <!-- /container -->
+
+  <script>
+    // Notes shower
+    <?php if (isset($GLOBALS['notes'])){ ?>
+    <?php foreach($GLOBALS['notes'] as $note){ ?>
+    <?php if ($note['log_en'] == 1){ ?>
+    note({
+      content: <?php echo $note['log_text']?>,
+      type: <?php echo $note['log_type']?>,
+      time: <?php echo $note['log_time']?>
+    });
+    <?php }}} ?>
+  </script>
+
+  </body>
+</html>

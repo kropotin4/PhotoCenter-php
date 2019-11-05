@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html" charset="utf8" />
+    <link href="css/jsgrid.min.css" rel="stylesheet" />
+    <link href="css/jsgrid-theme.min.css" rel="stylesheet" />
+    <link href="public/css/style.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="js/jsgrid.js"></script>
+    <script type="text/javascript" src="js/i18n/jsgrid-ru.js"></script>
+    <script type="text/javascript" src="public/js/gridLoader.js"></script>
+
+    <title>Photo Center</title>
+
+    <link rel="icon" href="database.ico">
+</head>
+<body>
+<header>
+    <h1>Photo Center <?php echo $table_name?></h1>
+</header>
+<nav class="menu">
+    <ul>
+        <li><a href="?table=" >Главная</a></li>
+        <li><a href="?table=consultants" >Consultants</a></li>
+        <li><a href="?table=customers" >Customers</a></li>
+        <li><a href="?table=products" >Products</a></li>
+        <li><a href="?table=product_types" >Product types</a></li>
+        <li><a href="?table=photo_centers" >Photo Centers</a></li>
+        <li><a href="?table=services" >Service </a></li>
+    </ul>
+</nav>
+
+
+<div id="jsGrid"></div>
+
+<script> showGrid(<?php echo $table_script?>); </script>
+
+<?php echo $mpage_data?>
+
+</body>
+</html>

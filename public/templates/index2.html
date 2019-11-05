@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" href="database.ico">
+
+    <title>Photo Center</title>
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-theme.css" rel="stylesheet">
+    <link href="public/css/dashboard.css" rel="stylesheet">
+    <link href="css/jsgrid.css" rel="stylesheet" />
+    <link href="css/jsgrid-theme.css" rel="stylesheet" />
+    <link href="public/css/alert.css" rel="stylesheet" />
+
+    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jsgrid.js"></script>
+    <script type="text/javascript" src="js/i18n/jsgrid-ru.js"></script>
+    <script type="text/javascript" src="public/js/gridLoader.js"></script>
+    <script type="text/javascript" src="public/js/alert.js"></script>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="?">Photo Center</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <!-- sign up -->
+          <form action="request_handlers/signup_h.php" method="GET" class="navbar-form navbar-right">
+            <input type="submit" class="btn btn-primary" value="Sign up">
+          </form>
+          <!-- sign in -->
+          <form action="request_handlers/signin_h.php" method="POST" class="navbar-form navbar-right">
+            <div class="form-group">
+              <input name="login" type="text" placeholder="Login" class="form-control">
+            </div>
+            <div class="form-group">
+              <input name="password" type="password" placeholder="Password" class="form-control">
+            </div>
+            <input type="submit" class="btn btn-success" value="Sign in">
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid fill">
+      <div class="row fill">
+        <div class="col-sm-3 col-md-1 sidebar">
+          <ul class="nav nav-sidebar">
+            <li><a href="?" >Главная</a></li>
+            <hr>
+            <li><a href="?table=consultants" >Consultants</a></li>
+            <li><a href="?table=customers" >Customers</a></li>
+            <li><a href="?table=products" >Products</a></li>
+            <li><a href="?table=product_types" >Product types</a></li>
+            <li><a href="?table=photo_centers" >Photo Centers</a></li>
+            <li><a href="?table=services" >Service </a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-11 col-md-offset-1 main">
+          <h1 class="page-header"><?php echo $table_name?></h1>
+          <div id="jsGrid"></div>
+          <?php echo $mpage_data?>
+        </div>
+      </div>
+    </div>
+
+  <script>
+    // Grid loader
+    showGrid(<?php echo $table_script?>);
+    // Notes shower
+    <?php if (isset($GLOBALS['notes'])){ ?>
+    <?php foreach($GLOBALS['notes'] as $note){ ?>
+    <?php if ($note['log_en'] == 1){ ?>
+    note({
+      content: <?php echo $note['log_text']?>,
+      type: <?php echo $note['log_type']?>,
+      time: <?php echo $note['log_time']?>
+    });
+    <?php }}} ?>
+  </script>
+
+  </body>
+</html>
