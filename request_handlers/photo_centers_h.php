@@ -19,7 +19,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["office_hours"], OFFICE_HOURS_FILT)
             && filter($filterData["phone"], PHONE_NUMBER_FILT)
         ){
-            $result = $photo_centers->getAll(array(
+            $result = $photo_centers->getAllFilter(array(
                 "address" => $filterData["address"],
                 "chains_name" => $filterData["chains_name"],
                 "office_hours" => $filterData["office_hours"],
@@ -132,4 +132,3 @@ switch($_SERVER["REQUEST_METHOD"]) {
 header("Content-Type: application/json");
 echo json_encode($result);
 
-?>

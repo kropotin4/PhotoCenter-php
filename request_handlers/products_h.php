@@ -18,7 +18,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["product_price"], NUMBER_FILT, 1)
             && filter($filterData["product_types_id"], NUMBER_FILT, 1)
         ){
-            $result = $products->getAll(array(
+            $result = $products->getAllFilter(array(
                 "product_name" => $filterData["product_name"],
                 "product_price" => $filterData["product_price"],
                 "product_types_id" => $filterData["product_types_id"]
@@ -122,5 +122,3 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
 header("Content-Type: application/json");
 echo json_encode($result);
-
-?>

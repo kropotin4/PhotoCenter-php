@@ -51,4 +51,12 @@ function filter($filt_data, $flag){
     }
 }
 
+function file_get_contents_php($path){
+    ob_start();
+    require_once $path;
+    $data = ob_get_contents();//file_get_contents("public/templates/sign_panel.html");
+    ob_end_clean();
+    return $data;
+}
+
 ?>

@@ -22,7 +22,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["service_date"], BURTH_DAY_FILT)
             && filter($filterData["service_time"], TIME_FILT)
         ){
-            $result = $services->getAll(array(
+            $result = $services->getAllFilter(array(
                 "consultant_id" => $filterData["consultant_id"],
                 "product_id" => $filterData["product_id"],
                 "customer_id" => $filterData["customer_id"],
@@ -141,5 +141,3 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
 header("Content-Type: application/json");
 echo json_encode($result);
-
-?>

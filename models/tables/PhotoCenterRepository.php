@@ -29,22 +29,30 @@ class PhotoCenterRepository {
         return $this->read($rows[0]);
     }
 
-    public function getAll($filter) {
-        $address = "%" . $filter["address"] . "%";
-        $chains_name = "%" . $filter["chains_name"] . "%";
-        $office_hours = "%" . $filter["office_hours"] . "%";
-        $phone = "%" . $filter["phone"] . "%";
+    public function getAll() {
+        $sql = "SELECT * FROM photo_centers_t";
+        $q = $this->db->prepare($sql);
+        $q->execute();
+        $rows = $q->fetchAll();
 
+        $result = array();
+        foreach($rows as $row) {
+            array_push($result, $this->read($row));
+        }
+        return $result;
+    }
+
+    public function getAllFilter($filter) {
         $sql = "SELECT * FROM photo_centers_t
             WHERE address LIKE :address
             AND chains_name LIKE :chains_name
             AND office_hours LIKE :office_hours
             AND phone LIKE :phone";
         $q = $this->db->prepare($sql);
-        $q->bindParam(":address", $address);
-        $q->bindParam(":chains_name", $chains_name);
-        $q->bindParam(":office_hours", $office_hours);
-        $q->bindParam(":phone", $phone);
+        $q->bindParam(":address", $address = "%" . $filter["address"] . "%");
+        $q->bindParam(":chains_name", $chains_name = "%" . $filter["chains_name"] . "%");
+        $q->bindParam(":office_hours", $office_hours = "%" . $filter["office_hours"] . "%");
+        $q->bindParam(":phone", $phone = "%" . $filter["phone"] . "%");
         $q->execute();
         $rows = $q->fetchAll();
 
@@ -91,5 +99,3 @@ class PhotoCenterRepository {
     }
 
 }
-
-?>

@@ -13,7 +13,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
         $filterData["product_types_name"] = getData($_GET, "product_types_name", "");
 
         if (filter($filterData["product_types_name"], FULL_NAME_FILT)){
-            $result = $product_types->getAll(array(
+            $result = $product_types->getAllFilter(array(
                 "product_types_name" => $filterData["product_types_name"]
             ));
             http_response_code(intval(FILTER_OK));
@@ -104,4 +104,3 @@ switch($_SERVER["REQUEST_METHOD"]) {
 header("Content-Type: application/json");
 echo json_encode($result);
 
-?>

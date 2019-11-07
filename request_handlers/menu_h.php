@@ -76,8 +76,21 @@ else {
     $mpage_data = file_get_contents("public/templates/main_page.html");
 }
 
-$sign_panel = file_get_contents("public/templates/sign_panel.html");
+$sql = "SELECT user_login from users_t WHERE user_sessid = :sessid";
+$q = $db->prepare($sql);
+$q->bindParam(":sessid", $_COOKIE["PHPSESSID"]);
+$q->execute();
+$rows = $q->fetchAll();
+
+if (count($rows)){
+    $user_login = $rows[0]["user_login"];
+    ob_start();
+    require_once "public/templates/sign_panel2.html";
+    $sign_panel = ob_get_contents();
+    ob_end_clean();
+}
+else {
+    $sign_panel = file_get_contents("public/templates/sign_panel.html");
+}
 
 require_once "public/templates/index2.html";
-
-?>

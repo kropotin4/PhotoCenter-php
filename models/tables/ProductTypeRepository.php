@@ -27,11 +27,22 @@ class ProductTypeRepository {
     }
 
     public function getAll($filter) {
-        $product_types_name = "%" . $filter["product_types_name"] . "%";
+        $sql = "SELECT * FROM product_types_t";
+        $q = $this->db->prepare($sql);
+        $q->execute();
+        $rows = $q->fetchAll();
 
+        $result = array();
+        foreach($rows as $row) {
+            array_push($result, $this->read($row));
+        }
+        return $result;
+    }
+
+    public function getAllFilter($filter) {
         $sql = "SELECT * FROM product_types_t WHERE product_types_name LIKE :product_types_name";
         $q = $this->db->prepare($sql);
-        $q->bindParam(":product_types_name", $product_types_name);
+        $q->bindParam(":product_types_name", $product_types_name = "%" . $filter["product_types_name"] . "%");
         $q->execute();
         $rows = $q->fetchAll();
 
@@ -69,5 +80,3 @@ class ProductTypeRepository {
     }
 
 }
-
-?>

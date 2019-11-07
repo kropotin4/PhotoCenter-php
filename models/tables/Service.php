@@ -8,5 +8,3 @@ class Service {
     public $service_date;
     public $service_time;
 }
-
-?>

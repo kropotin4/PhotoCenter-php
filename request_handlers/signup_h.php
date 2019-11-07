@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST'){
         $rows = $q->fetchAll();
 
         if (!count($rows)){
+            // Никого с таким login
             $sql = "INSERT INTO users_t (user_login, user_password, user_type)
                 VALUES (:login, :password, :type)";
             $q = $db->prepare($sql);
@@ -36,5 +37,3 @@ else{
     require_once "../public/templates/signup.html";
 }
 
-
-?>

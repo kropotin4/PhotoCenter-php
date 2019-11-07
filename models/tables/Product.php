@@ -6,5 +6,3 @@ class Product {
     public $product_price;
     public $product_types_id;
 }
-
-?>

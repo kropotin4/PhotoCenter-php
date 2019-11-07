@@ -31,16 +31,28 @@ class ConsultantRepository {
         return $this->read($rows[0]);
     }
 
-    public function getAll($filter) {
-        $full_name = "%" . $filter["full_name"] . "%";
-        $passport_data = "%" . $filter["passport_data"] . "%";
-        $pc_id = $filter["pc_id"];
-
-        $sql = "SELECT * FROM consultants_t WHERE full_name LIKE :full_name AND passport_data LIKE :passport_data AND (:pc_id = 0 OR pc_id = :pc_id)";
+    public function getAll() {
+        $sql = "SELECT * FROM consultants_t";
         $q = $this->db->prepare($sql);
-        $q->bindParam(":full_name", $full_name);
-        $q->bindParam(":passport_data", $passport_data);
-        $q->bindParam(":pc_id", $pc_id);
+        $q->execute();
+        $rows = $q->fetchAll();
+
+        $result = array();
+        foreach($rows as $row) {
+            array_push($result, $this->read($row));
+        }
+        return $result;
+    }
+
+    public function getAllFilter($filter) {
+        $sql = "SELECT * FROM consultants_t WHERE 
+                full_name LIKE :full_name 
+                AND passport_data LIKE :passport_data 
+                AND (:pc_id = 0 OR pc_id = :pc_id)";
+        $q = $this->db->prepare($sql);
+        $q->bindParam(":full_name", $full_name = "%" . $filter["full_name"] . "%");
+        $q->bindParam(":passport_data", $passport_data = "%" . $filter["passport_data"] . "%");
+        $q->bindParam(":pc_id", $filter["pc_id"]);
         $q->execute();
         $rows = $q->fetchAll();
 
@@ -93,5 +105,3 @@ class ConsultantRepository {
     }
 
 }
-
-?>

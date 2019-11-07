@@ -5,5 +5,3 @@ class Customer {
     public $full_name;
     public $age;
 }
-
-?>

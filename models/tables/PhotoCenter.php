@@ -7,5 +7,3 @@ class PhotoCenter {
     public $office_hours;
     public $phone;
 }
-
-?>

@@ -17,7 +17,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["passport_data"], PASSPORT_FILT)
             && filter($filterData["pc_id"], NUMBER_FILT)
         ){
-            $result = $consultants->getAll(array(
+            $result = $consultants->getAllFilter(array(
                 "full_name" => $filterData["full_name"],
                 "passport_data" => $filterData["passport_data"],
                 "pc_id" => $filterData["pc_id"]
@@ -134,8 +134,6 @@ switch($_SERVER["REQUEST_METHOD"]) {
         break;
 }
 
-
 header("Content-Type: application/json");
 echo json_encode($result);
 
-?>

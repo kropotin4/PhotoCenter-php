@@ -27,14 +27,24 @@ class CustomerRepository {
         return $this->read($rows[0]);
     }
 
-    public function getAll($filter) {
-        $full_name = "%" . $filter["full_name"] . "%";
-        $age = "%" . $filter["age"] . "%";
-
+    public function getAll() {
         $sql = "SELECT * FROM customers_t WHERE full_name LIKE :full_name AND age LIKE :age";
         $q = $this->db->prepare($sql);
-        $q->bindParam(":full_name", $full_name);
-        $q->bindParam(":age", $age);
+        $q->execute();
+        $rows = $q->fetchAll();
+
+        $result = array();
+        foreach($rows as $row) {
+            array_push($result, $this->read($row));
+        }
+        return $result;
+    }
+
+    public function getAllFilter($filter) {
+        $sql = "SELECT * FROM customers_t WHERE full_name LIKE :full_name AND age LIKE :age";
+        $q = $this->db->prepare($sql);
+        $q->bindParam(":full_name", $full_name = "%" . $filter["full_name"] . "%");
+        $q->bindParam(":age", $age = "%" . $filter["age"] . "%");
         $q->execute();
         $rows = $q->fetchAll();
 
@@ -75,5 +85,3 @@ class CustomerRepository {
     }
 
 }
-
-?>

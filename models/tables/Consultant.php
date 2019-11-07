@@ -9,5 +9,3 @@ class Consultant {
     public $birth_date;
     public $pc_id;
 }
-
-?>

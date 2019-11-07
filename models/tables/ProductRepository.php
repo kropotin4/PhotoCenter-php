@@ -28,19 +28,28 @@ class ProductRepository {
         return $this->read($rows[0]);
     }
 
-    public function getAll($filter) {
-        $product_name = "%" . $filter["product_name"] . "%";
-        $product_price = $filter["product_price"];
-        $product_types_id = $filter["product_types_id"];
+    public function getAll() {
+        $sql = "SELECT * FROM products_t";
+        $q = $this->db->prepare($sql);
+        $q->execute();
+        $rows = $q->fetchAll();
 
+        $result = array();
+        foreach($rows as $row) {
+            array_push($result, $this->read($row));
+        }
+        return $result;
+    }
+
+    public function getAllFilter($filter) {
         $sql = "SELECT * FROM products_t
             WHERE product_name LIKE :product_name
             AND (:product_price = 0 OR product_price = :product_price)
             AND (:product_types_id = 0 OR product_types_id = :product_types_id)";
         $q = $this->db->prepare($sql);
-        $q->bindParam(":product_name", $product_name);
-        $q->bindParam(":product_price", $product_price, PDO::PARAM_INT);
-        $q->bindParam(":product_types_id", $product_types_id, PDO::PARAM_INT);
+        $q->bindParam(":product_name", $product_name = "%" . $filter["product_name"] . "%");
+        $q->bindParam(":product_price", $filter["product_price"], PDO::PARAM_INT);
+        $q->bindParam(":product_types_id", $filter["product_types_id"], PDO::PARAM_INT);
         $q->execute();
         $rows = $q->fetchAll();
 
@@ -84,5 +93,3 @@ class ProductRepository {
     }
 
 }
-
-?>

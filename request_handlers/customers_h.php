@@ -17,7 +17,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
         if (filter($filterData["full_name"], FULL_NAME_FILT)
             && filter($filterData["age"], NUMBER_FILT)
         ){
-            $result = $customers->getAll(array(
+            $result = $customers->getAllFilter(array(
                 "full_name" => $filterData["full_name"],
                 "age" => $filterData["age"]
             ));
@@ -116,4 +116,3 @@ switch($_SERVER["REQUEST_METHOD"]) {
 header("Content-Type: application/json");
 echo json_encode($result);
 
-?>
