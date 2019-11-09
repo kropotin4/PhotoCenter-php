@@ -20,6 +20,8 @@ define('ADDRESS_FILT', 6);
 define('OFFICE_HOURS_FILT', 7);
 define('TIME_FILT', 8);
 define('TABLE_FILT', 9);
+define('LOGIN_FILT', 10);
+define('PASSWORD_FILT', 11);
 
 function filter($filt_data, $flag){
     switch ($flag) {
@@ -45,6 +47,10 @@ function filter($filt_data, $flag){
             return preg_match("/^[0-9:]{0,8}$/ui", $filt_data);
         case TABLE_FILT:
             return preg_match("/^[a-z_]{1,20}$/u", $filt_data);
+        case LOGIN_FILT:
+            return preg_match("/^[a-zа-я0-9]{0,30}$/u", $filt_data);
+        case PASSWORD_FILT:
+            return preg_match("/^[а-я0-9]{0,32}$/ui", $filt_data);
         default:
             return 0;
             break;

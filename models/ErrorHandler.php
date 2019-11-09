@@ -74,34 +74,7 @@ function writeLog($textLog) {
 
 ////////////////////////////////
 
-class Note{
-    private $log_data;
-
-    public function __construct() {
-        $this->log_data = [];
-        $this->log_data['log_time'] = 10;
-    }
-
-    public function  pushNote(){
-        if (!isset($GLOBALS['notes']))
-            $GLOBALS['notes'] = array();
-        array_push($GLOBALS['notes'], $this->log_data);
-    }
-
-    public function setEnable($en){
-        $this->log_data['log_en'] = $en;
-    }
-    public function setType($type){
-        $this->log_data['log_type'] = '"' . $type . '"';
-    }
-    public function setText($text){
-        $this->log_data['log_text'] = '"' . $text . '"';
-    }
-    public function setTime($time){
-        $this->log_data['log_time'] = $time;
-    }
-};
-
+require_once "Notice.php";
 
 function errorHandler(
     $errno,     // Уровень ошибки
@@ -116,7 +89,7 @@ function errorHandler(
         return false;
     }
 
-    $note = new Note();
+    $note = new Notice();
 
     $logText = "";
     if ($errfile != "")

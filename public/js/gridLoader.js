@@ -18,6 +18,12 @@ function showGrid(gridId){
         case 5:
             showServicesGrid();
             break;
+        case 6:
+            showUsersGrid();
+            break;
+        case 7:
+            showUserTypesGrid();
+            break;
         default:
             break;
     }
@@ -635,4 +641,185 @@ function showServicesGrid(){
             });
         }
     );
+};
+
+
+function showUsersGrid(){
+    jsGrid.locale("ru");
+    $url = "request_handlers/users_h.php";
+
+    $("#jsGrid").jsGrid({
+        height: "70vh",
+        width: "100%",
+        filtering: true,
+        inserting: true,
+        editing: true,
+        sorting: true,
+        paging: true,
+        autoload: true,
+        pageSize: 10,
+        pageButtonCount: 5,
+        controller: {
+            loadData: function(filter) {
+                return $.ajax({
+                    type: "GET",
+                    url: $url,
+                    data: filter,
+                    success: function(res){
+                        return res;
+                    },
+                    statusCode: {
+                        406: function(errdata){
+                            badResponseHandler(errdata);
+                        }
+                    }
+
+                });
+            },
+            insertItem: function(item) {
+                return $.ajax({
+                    type: "POST",
+                    url: $url,
+                    data: item,
+                    success: function(res){
+                        return res;
+                    },
+                    statusCode: {
+                        406: function(errdata){
+                            badResponseHandler(errdata);
+                        }
+                    }
+                });
+            },
+            updateItem: function(item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: $url,
+                    data: item,
+                    success: function(res){
+                        return res;
+                    },
+                    statusCode: {
+                        406: function(errdata){
+                            badResponseHandler(errdata);
+                        }
+                    }
+                });
+            },
+            deleteItem: function(item) {
+                return $.ajax({
+                    type: "DELETE",
+                    url: $url,
+                    data: item,
+                    success: function(res){
+                        return res;
+                    },
+                    statusCode: {
+                        406: function(errdata){
+                            badResponseHandler(errdata);
+                        }
+                    }
+                });
+            }
+        },
+        fields: [
+            { name: "user_login", title: "Логин", type: "text", width: 30 },
+            { name: "user_password", title: "Пароль", type: "text", width: 125, filtering: false },
+            { name: "user_sessid", title: "Сессионный идентификатор", type: "text", width: 55, filtering: false, inserting: false },
+            { name: "user_type", title: "Тип пользователя", type: "text", width: 25 },
+            { type: "control" }
+        ]
+    });
+};
+
+
+function showUserTypesGrid(){
+    jsGrid.locale("ru");
+    $url = "request_handlers/user_types_h.php";
+
+    $("#jsGrid").jsGrid({
+        height: "70vh",
+        width: "100%",
+        filtering: true,
+        inserting: true,
+        editing: true,
+        sorting: true,
+        paging: true,
+        autoload: true,
+        pageSize: 10,
+        pageButtonCount: 5,
+        controller: {
+            loadData: function(filter) {
+                return $.ajax({
+                    type: "GET",
+                    url: $url,
+                    data: filter,
+                    success: function(res){
+                        return res;
+                    },
+                    statusCode: {
+                        406: function(errdata){
+                            badResponseHandler(errdata);
+                        }
+                    }
+
+                });
+            },
+            insertItem: function(item) {
+                return $.ajax({
+                    type: "POST",
+                    url: $url,
+                    data: item,
+                    success: function(res){
+                        return res;
+                    },
+                    statusCode: {
+                        406: function(errdata){
+                            badResponseHandler(errdata);
+                        }
+                    }
+                });
+            },
+            updateItem: function(item) {
+                return $.ajax({
+                    type: "PUT",
+                    url: $url,
+                    data: item,
+                    success: function(res){
+                        return res;
+                    },
+                    statusCode: {
+                        406: function(errdata){
+                            badResponseHandler(errdata);
+                        }
+                    }
+                });
+            },
+            deleteItem: function(item) {
+                return $.ajax({
+                    type: "DELETE",
+                    url: $url,
+                    data: item,
+                    success: function(res){
+                        return res;
+                    },
+                    statusCode: {
+                        406: function(errdata){
+                            badResponseHandler(errdata);
+                        }
+                    }
+                });
+            }
+        },
+        fields: [
+            { name: "consultants_t", type: "text", width: 20 },
+            { name: "customers_t", type: "text", width: 20 },
+            { name: "photo_centers_t", type: "text", width: 20 },
+            { name: "products_t", type: "text", width: 20 },
+            { name: "product_types_t", type: "text", width: 20 },
+            { name: "service_t", type: "text", width: 20 },
+            { name: "users_t", type: "text", width: 20 },
+            { type: "control" }
+        ]
+    });
 };

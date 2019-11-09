@@ -2,6 +2,7 @@
 
 require_once "models/utils.php";
 require_once "config.php";
+require_once "models/Notice.php";
 
 if (isset($_SESSION["errors"])){
     trigger_error($_SESSION["errors"]["text"], $_SESSION["errors"]["type"]);
@@ -43,6 +44,7 @@ if (isset($_REQUEST['table'])){
 
     $data = "";
     $table_script = $rows[0]['table_id'];
+    Notice::createAndPushNote($table_script);
     switch ($table_script) {
         case 0:
             $table_name = "Consultants";
@@ -62,7 +64,12 @@ if (isset($_REQUEST['table'])){
         case 5:
             $table_name = "Service";
             break;
-
+        case 6:
+            $table_name = "Users";
+            break;
+        case 7:
+            $table_name = "User Types";
+            break;
         default:
             trigger_error("Какая-то фигня", E_USER_ERROR);
             goto exit_gt;
@@ -83,11 +90,12 @@ $q->execute();
 $rows = $q->fetchAll();
 
 if (count($rows)){
-    $user_login = $rows[0]["user_login"];
-    ob_start();
-    require_once "public/templates/sign_panel2.html";
-    $sign_panel = ob_get_contents();
-    ob_end_clean();
+    $sign_panel = strtr(
+        file_get_contents(
+            "public/templates/sign_panel2.html"
+        ),
+        array('{$user_login}' => $rows[0]["user_login"])
+    );
 }
 else {
     $sign_panel = file_get_contents("public/templates/sign_panel.html");
