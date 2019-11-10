@@ -25,7 +25,7 @@ class UserTypeRepository {
     }
 
     public function getById($id) {
-        $sql = "SELECT * FROM user_types_t WHERE user_id = :id";
+        $sql = "SELECT * FROM user_types_t WHERE user_type_id = :id";
         $q = $this->db->prepare($sql);
         $q->bindParam(":id", $id, PDO::PARAM_INT);
         $q->execute();
@@ -113,7 +113,7 @@ class UserTypeRepository {
     }
 
     public function remove($id) {
-        $sql = "DELETE FROM user_types_t WHERE user_id = :id";
+        $sql = "DELETE FROM user_types_t WHERE user_type_id = :id";
         $q = $this->db->prepare($sql);
         $q->bindParam(":id", $id, PDO::PARAM_INT);
         $q->execute();

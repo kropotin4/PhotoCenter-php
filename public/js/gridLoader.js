@@ -24,6 +24,9 @@ function showGrid(gridId){
         case 7:
             showUserTypesGrid();
             break;
+        case 8:
+            showAcessRightsGrid();
+            break;
         default:
             break;
     }
@@ -219,7 +222,7 @@ function showConsultantsGrid(){
                         { name: "pc_id", title: "Название салона",
                             type: "select",
                             items: photo_centers,
-                            valueFuild: "pc_id",
+                            valueField: "pc_id",
                             textField: "chains_name",
                             editing: false,
                             filtering: false,
@@ -228,7 +231,7 @@ function showConsultantsGrid(){
                         { name: "pc_id", title: "Место работы",
                             type: "select",
                             items: photo_centers,
-                            valueFuild: "pc_id",
+                            valueField: "pc_id",
                             textField: "address",
                             width: 70
                         },
@@ -423,7 +426,7 @@ function showProductsGrid(){
                     { name: "product_types_id", title: "Тип",
                         type: "select",
                         items: product_types,
-                        valueFuild: "product_types_id",
+                        valueField: "product_types_id",
                         textField: "product_types_name"
                     },
                     { type: "control" }
@@ -616,21 +619,21 @@ function showServicesGrid(){
                     { name: "consultant_id", title: "Консультант",
                         type: "select",
                         items: consultants[0],
-                        valueFuild: "consultant_id",
+                        valueField: "consultant_id",
                         textField: "full_name",
                         width: 70
                     },
                     { name: "product_id", title: "Услуга",
                         type: "select",
                         items: products[0],
-                        valueFuild: "product_id",
+                        valueField: "product_id",
                         textField: "product_name",
                         width: 50
                     },
                     { name: "customer_id", title: "Покупатель",
                         type: "select",
                         items: customers[0],
-                        valueFuild: "customer_id",
+                        valueField: "customer_id",
                         textField: "full_name",
                         width: 70
                     },
@@ -724,7 +727,7 @@ function showUsersGrid(){
         },
         fields: [
             { name: "user_login", title: "Логин", type: "text", width: 30 },
-            { name: "user_password", title: "Пароль", type: "text", width: 125, filtering: false },
+            { name: "user_password", title: "Пароль", type: "text", width: 125, filtering: false, editing: false },
             { name: "user_sessid", title: "Сессионный идентификатор", type: "text", width: 55, filtering: false, inserting: false },
             { name: "user_type", title: "Тип пользователя", type: "text", width: 25 },
             { type: "control" }
@@ -736,13 +739,151 @@ function showUsersGrid(){
 function showUserTypesGrid(){
     jsGrid.locale("ru");
     $url = "request_handlers/user_types_h.php";
+    $.when(
+        $.ajax({
+            type: "GET",
+            url: "request_handlers/access_rights_h.php"
+        })
+    ).then(
+        function(access_rights) {
+            access_rights.unshift({right_id: "", right_name: ""});
+
+            $("#jsGrid").jsGrid({
+                height: "70vh",
+                width: "100%",
+                filtering: true,
+                inserting: true,
+                editing: true,
+                sorting: true,
+                paging: true,
+                autoload: true,
+                pageSize: 10,
+                pageButtonCount: 5,
+                controller: {
+                    loadData: function (filter) {
+                        return $.ajax({
+                            type: "GET",
+                            url: $url,
+                            data: filter,
+                            success: function (res) {
+                                return res;
+                            },
+                            statusCode: {
+                                406: function (errdata) {
+                                    badResponseHandler(errdata);
+                                }
+                            }
+
+                        });
+                    },
+                    insertItem: function (item) {
+                        return $.ajax({
+                            type: "POST",
+                            url: $url,
+                            data: item,
+                            success: function (res) {
+                                return res;
+                            },
+                            statusCode: {
+                                406: function (errdata) {
+                                    badResponseHandler(errdata);
+                                }
+                            }
+                        });
+                    },
+                    updateItem: function (item) {
+                        return $.ajax({
+                            type: "PUT",
+                            url: $url,
+                            data: item,
+                            success: function (res) {
+                                return res;
+                            },
+                            statusCode: {
+                                406: function (errdata) {
+                                    badResponseHandler(errdata);
+                                }
+                            }
+                        });
+                    },
+                    deleteItem: function (item) {
+                        return $.ajax({
+                            type: "DELETE",
+                            url: $url,
+                            data: item,
+                            success: function (res) {
+                                return res;
+                            },
+                            statusCode: {
+                                406: function (errdata) {
+                                    badResponseHandler(errdata);
+                                }
+                            }
+                        });
+                    }
+                },
+                fields: [
+                    {name: "user_type_id", title: "", type: "text", width: 20, editing: false, inserting: false},
+                    { name: "consultants_t",
+                        type: "select",
+                        items: access_rights,
+                        valueField: "right_id",
+                        textField: "right_name"
+                    },
+                    { name: "customers_t",
+                        type: "select",
+                        items: access_rights,
+                        valueField: "right_id",
+                        textField: "right_name"
+                    },
+                    { name: "photo_centers_t",
+                        type: "select",
+                        items: access_rights,
+                        valueField: "right_id",
+                        textField: "right_name"
+                    },
+                    { name: "products_t",
+                        type: "select",
+                        items: access_rights,
+                        valueField: "right_id",
+                        textField: "right_name"
+                    },
+                    { name: "product_types_t",
+                        type: "select",
+                        items: access_rights,
+                        valueField: "right_id",
+                        textField: "right_name"
+                    },
+                    { name: "service_t",
+                        type: "select",
+                        items: access_rights,
+                        valueField: "right_id",
+                        textField: "right_name"
+                    },
+                    { name: "users_t",
+                        type: "select",
+                        items: access_rights,
+                        valueField: "right_id",
+                        textField: "right_name"
+                    },
+                    {type: "control"}
+                ]
+            });
+        }
+    );
+};
+
+
+function showAcessRightsGrid(){
+    jsGrid.locale("ru");
+    $url = "request_handlers/access_rights_h.php";
 
     $("#jsGrid").jsGrid({
         height: "70vh",
         width: "100%",
         filtering: true,
-        inserting: true,
-        editing: true,
+        inserting: false,
+        editing: false,
         sorting: true,
         paging: true,
         autoload: true,
@@ -812,14 +953,9 @@ function showUserTypesGrid(){
             }
         },
         fields: [
-            { name: "consultants_t", type: "text", width: 20 },
-            { name: "customers_t", type: "text", width: 20 },
-            { name: "photo_centers_t", type: "text", width: 20 },
-            { name: "products_t", type: "text", width: 20 },
-            { name: "product_types_t", type: "text", width: 20 },
-            { name: "service_t", type: "text", width: 20 },
-            { name: "users_t", type: "text", width: 20 },
-            { type: "control" }
+            { name: "right_id", type: "text", width: 20 },
+            { name: "right_name", type: "text", width: 20 },
+            { type: "control", editButton: false, deleteButton: false}
         ]
     });
 };

@@ -1,23 +1,20 @@
 <?php
 
-require_once "../models/tables/UserRepository.php";
+require_once "../models/tables/AccessRightRepository.php";
 require_once "../models/utils.php";
 
 require_once "../config.php";
 
-$users = new UserRepository($db);
+$access_rights = new AccessRightRepository($db);
+
 
 switch($_SERVER["REQUEST_METHOD"]) {
     case "GET":
-        $filterData["user_login"] = getData($_GET, "user_login", "");
-        $filterData["user_type"] = getData($_GET, "user_type", "");
+        $right_name = getData($_GET, "right_name", "");
 
-        if (filter($filterData["user_login"], LOGIN_FILT)
-            && filter($filterData["user_type"], NUMBER_FILT)
-        ){
-            $result = $users->getAllFilter(array(
-                "user_login" => $filterData["user_login"],
-                "user_type" => $filterData["user_type"]
+        if (filter($right_name, ACCESS_RIGHT_FILT)){
+            $result = $access_rights->getAllFilter(array(
+                "right_name" => $right_name
             ));
             http_response_code(intval(FILTER_OK));
         }
@@ -34,18 +31,11 @@ switch($_SERVER["REQUEST_METHOD"]) {
         break;
 
     case "POST":
-        $filterData["user_login"] = $_POST["user_login"];
-        $filterData["user_password"] = $_POST["user_password"];
-        $filterData["user_type"] = $_POST["user_type"];
+        $right_name = $_POST["right_name"];
 
-        if (filter($filterData["user_login"], LOGIN_FILT)
-            && filter($filterData["user_password"], LOGIN_FILT)
-            && filter($filterData["user_type"], NUMBER_FILT)
-        ){
-            $result = $users->insert(array(
-                "user_login" => $filterData["user_login"],
-                "user_password" => $filterData["user_password"],
-                "user_type" => $filterData["user_type"]
+        if (filter($right_name, ACCESS_RIGHT_FILT)){
+            $result = $access_rights->insert(array(
+                "right_name" => $right_name
             ));
             http_response_code(intval(FILTER_OK));
         }
@@ -64,19 +54,15 @@ switch($_SERVER["REQUEST_METHOD"]) {
     case "PUT":
         parse_str(file_get_contents("php://input"), $_PUT);
 
-        $filterData["user_login"] = $_PUT["user_login"];
-        $filterData["user_password"] = $_PUT["user_password"];
-        $filterData["user_type"] = $_PUT["user_type"];
-        $filterData["user_id"] = $_PUT["user_id"];
+        $right_id = $_PUT["right_id"];
+        $right_name = $_PUT["right_name"];
 
-        if (filter($filterData["user_login"], LOGIN_FILT)
-            && filter($filterData["user_type"], NUMBER_FILT)
-            && filter($filterData["user_id"], NUMBER_FILT)
+        if (filter($right_name, ACCESS_RIGHT_FILT)
+            && filter($right_id, NUMBER_FILT)
         ){
-            $result = $users->update(array(
-                "user_login" => $filterData["user_login"],
-                "user_type" => $filterData["user_type"],
-                "user_id" => $filterData["user_id"]
+            $result = $access_rights->update(array(
+                "right_id" => intval($right_id),
+                "right_name" => $right_name
             ));
             http_response_code(intval(FILTER_OK));
         }
@@ -95,10 +81,10 @@ switch($_SERVER["REQUEST_METHOD"]) {
     case "DELETE":
         parse_str(file_get_contents("php://input"), $_DELETE);
 
-        $filterData["user_id"] = $_DELETE["user_id"];
+        $right_id = $_DELETE["right_id"];
 
-        if (filter($filterData["user_id"], NUMBER_FILT)){
-            $result = $users->remove(intval($filterData["user_id"]));
+        if (filter($right_id, NUMBER_FILT)){
+            $result = $access_rights->remove(intval($right_id));
             http_response_code(intval(FILTER_OK));
         }
         else {
@@ -113,6 +99,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         break;
 }
+
 
 header("Content-Type: application/json");
 echo json_encode($result);

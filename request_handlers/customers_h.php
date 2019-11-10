@@ -1,6 +1,7 @@
 <?php
 
 require_once "../models/tables/CustomerRepository.php";
+require_once "../models/AccessTable.php";
 require_once "../models/utils.php";
 
 require_once "../config.php";

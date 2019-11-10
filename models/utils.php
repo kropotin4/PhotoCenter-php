@@ -22,6 +22,7 @@ define('TIME_FILT', 8);
 define('TABLE_FILT', 9);
 define('LOGIN_FILT', 10);
 define('PASSWORD_FILT', 11);
+define('ACCESS_RIGHT_FILT', 12);
 
 function filter($filt_data, $flag){
     switch ($flag) {
@@ -51,6 +52,8 @@ function filter($filt_data, $flag){
             return preg_match("/^[a-zа-я0-9]{0,30}$/u", $filt_data);
         case PASSWORD_FILT:
             return preg_match("/^[а-я0-9]{0,32}$/ui", $filt_data);
+        case ACCESS_RIGHT_FILT:
+            return preg_match("/^[a-z+]{0,30}$/ui", $filt_data);
         default:
             return 0;
             break;

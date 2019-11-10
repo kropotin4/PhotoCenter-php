@@ -13,6 +13,7 @@ class UserRepository {
 
     private function read($row) {
         $result = new User();
+        $result->user_val = isset($row["user_id"]) ? 1 : 0;
         $result->user_id = $row["user_id"];
         $result->user_login = $row["user_login"];
         $result->user_password = $row["user_password"];
@@ -28,6 +29,15 @@ class UserRepository {
         $q->execute();
         $rows = $q->fetchAll();
         return $this->read($rows[0]);
+    }
+
+    public function getBySessId($id) {
+        $sql = "SELECT * FROM users_t WHERE user_sessid = :id";
+        $q = $this->db->prepare($sql);
+        $q->bindParam(":id", $id);
+        $q->execute();
+        $rows = $q->fetchAll();
+        return count($rows) ? $this->read($rows[0]) : new User();
     }
 
     public function getAll() {

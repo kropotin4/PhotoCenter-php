@@ -92,7 +92,7 @@ class PhotoCenterRepository {
     }
 
     public function remove($id) {
-        $sql = "DELETE FROM clients WHERE pc_id = :id";
+        $sql = "DELETE FROM photo_centers_t WHERE pc_id = :id";
         $q = $this->db->prepare($sql);
         $q->bindParam(":id", $id, PDO::PARAM_INT);
         $q->execute();

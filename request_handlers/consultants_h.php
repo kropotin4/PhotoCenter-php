@@ -1,6 +1,7 @@
 <?php
 
 require_once "../models/tables/ConsultantRepository.php";
+require_once "../models/AccessTable.php";
 require_once "../models/utils.php";
 
 require_once "../config.php";
@@ -16,6 +17,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
         if (filter($filterData["full_name"], FULL_NAME_FILT)
             && filter($filterData["passport_data"], PASSPORT_FILT)
             && filter($filterData["pc_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, CONSULTANTS, READ)
         ){
             $result = $consultants->getAllFilter(array(
                 "full_name" => $filterData["full_name"],
@@ -50,6 +52,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["sex"], CHARS_ONLY_FILT)
             && filter($filterData["birth_date"], BURTH_DAY_FILT)
             && filter($filterData["pc_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, CONSULTANTS, INSERT)
         ){
             $result = $consultants->insert(array(
                 "full_name" => $filterData["full_name"],
@@ -89,6 +92,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["sex"], CHARS_ONLY_FILT)
             && filter($filterData["birth_date"], BURTH_DAY_FILT)
             && filter($filterData["pc_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, CONSULTANTS, EDIT)
         ){
             $result = $consultants->update(array(
                 "full_name" => $filterData["full_name"],
@@ -117,7 +121,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         $filterData["consultant_id"] = $_DELETE["consultant_id"];
 
-        if (filter($filterData["consultant_id"], NUMBER_FILT)){
+        if (filter($filterData["consultant_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, CONSULTANTS, DELETE)){
             $result = $consultants->remove(intval($filterData["consultant_id"]));
             http_response_code(intval(FILTER_OK));
         }
