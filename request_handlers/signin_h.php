@@ -1,25 +1,16 @@
 <?php
 
+require_once "../models/tables/UserRepository.php";
 require_once "../config.php";
 
+$users = new UserRepository($db);
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST'){
     if (isset($_REQUEST["login"]) && isset($_REQUEST["password"])){
-        $sql = "SELECT * FROM users_t WHERE user_login = :login";
-        $q = $db->prepare($sql);
-        $q->bindParam(":login", $_REQUEST["login"]);
-        $q->execute();
-        $rows = $q->fetchAll();
-
-        if (count($rows)){
-            if (password_verify($_REQUEST["password"], $rows[0]["user_password"])){
-                $sql = "UPDATE users_t SET
-                    user_sessid = :sessid
-                    WHERE user_id = :id";
-                $q = $db->prepare($sql);
-                $q->bindParam(":sessid", $_COOKIE["PHPSESSID"]);
-                $q->bindParam(":id", $rows[0]["user_id"], PDO::PARAM_INT);
-                $q->execute();
+        $user = $users->getByLogin($_REQUEST["login"]);
+        if ($user->user_val){
+            if (password_verify($_REQUEST["password"], $user->user_password)){
+                $users->startSess($user->user_id);
 
                 header('Location: ../');
                 exit;

@@ -1,6 +1,7 @@
 <?php
 
 require_once "../models/tables/ProductTypeRepository.php";
+require_once "../models/AccessTable.php";
 require_once "../models/utils.php";
 
 require_once "../config.php";
@@ -12,7 +13,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
     case "GET":
         $filterData["product_types_name"] = getData($_GET, "product_types_name", "");
 
-        if (filter($filterData["product_types_name"], FULL_NAME_FILT)){
+        if (filter($filterData["product_types_name"], FULL_NAME_FILT)
+            && AccessTable::checkAccess($db, PRODUCT_TYPES, READ)){
             $result = $product_types->getAllFilter(array(
                 "product_types_name" => $filterData["product_types_name"]
             ));
@@ -33,7 +35,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
     case "POST":
         $filterData["product_types_name"] = $_POST["product_types_name"];
 
-        if (filter($filterData["product_types_name"], FULL_NAME_FILT)){
+        if (filter($filterData["product_types_name"], FULL_NAME_FILT)
+            && AccessTable::checkAccess($db, PRODUCT_TYPES, INSERT)){
             $result = $product_types->insert(array(
                 "product_types_name" => $filterData["product_types_name"]
             ));
@@ -59,6 +62,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         if (filter($filterData["product_types_name"], FULL_NAME_FILT)
             && filter($filterData["product_types_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, PRODUCT_TYPES, EDIT)
         ){
             $result = $product_types->update(array(
                 "product_types_id" => intval($filterData["product_types_id"]),
@@ -83,7 +87,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         $filterData["product_types_id"] = $_DELETE["product_types_id"];
 
-        if (filter($filterData["product_types_id"], NUMBER_FILT)){
+        if (filter($filterData["product_types_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, PRODUCT_TYPES, DELETE)){
             $result = $product_types->remove(intval($_DELETE["product_types_id"]));
             http_response_code(intval(FILTER_OK));
         }

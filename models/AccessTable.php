@@ -1,7 +1,7 @@
 <?php
 
-require_once "models/tables/UserRepository.php";
-require_once "models/tables/UserTypeRepository.php";
+require_once "tables/UserRepository.php";
+require_once "tables/UserTypeRepository.php";
 
 define('CONSULTANTS', 0);
 define('CUSTOMERS', 1);
@@ -31,21 +31,21 @@ class AccessTable
                 case CONSULTANTS:
                     return AccessTable::parseAccess($access_type, $access_rights->consultants_t);
                 case CUSTOMERS:
-                    return AccessTable::parseAccess($access_type, $access_rights->consultants_t);
+                    return AccessTable::parseAccess($access_type, $access_rights->customers_t);
                 case PRODUCTS:
-                    return AccessTable::parseAccess($access_type, $access_rights->consultants_t);
+                    return AccessTable::parseAccess($access_type, $access_rights->products_t);
                 case PHOTO_CENTERS:
-                    return AccessTable::parseAccess($access_type, $access_rights->consultants_t);
+                    return AccessTable::parseAccess($access_type, $access_rights->photo_centers_t);
                 case PRODUCT_TYPES:
-                    return AccessTable::parseAccess($access_type, $access_rights->consultants_t);
+                    return AccessTable::parseAccess($access_type, $access_rights->product_types_t);
                 case SERVICES:
-                    return AccessTable::parseAccess($access_type, $access_rights->consultants_t);
+                    return AccessTable::parseAccess($access_type, $access_rights->service_t);
                 case USERS:
-                    return AccessTable::parseAccess($access_type, $access_rights->consultants_t);
+                    return AccessTable::parseAccess($access_type, $access_rights->users_t);
                 case USER_TYPES:
-                    return AccessTable::parseAccess($access_type, $access_rights->consultants_t);
+                    return AccessTable::parseAccess($access_type, $access_rights->user_types_t);
                 case ACCESS_RIGHTS:
-                    return AccessTable::parseAccess($access_type, $access_rights->consultants_t);
+                    return 1;
                 default:
                     trigger_error("Неизвестный table_id", E_ERROR);
                     break;

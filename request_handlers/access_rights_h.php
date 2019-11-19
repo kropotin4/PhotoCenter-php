@@ -1,5 +1,6 @@
 <?php
 
+require_once "../models/AccessTable.php";
 require_once "../models/tables/AccessRightRepository.php";
 require_once "../models/utils.php";
 
@@ -12,7 +13,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
     case "GET":
         $right_name = getData($_GET, "right_name", "");
 
-        if (filter($right_name, ACCESS_RIGHT_FILT)){
+        if (filter($right_name, ACCESS_RIGHT_FILT)
+            && AccessTable::checkAccess($db, ACCESS_RIGHTS, READ)){
             $result = $access_rights->getAllFilter(array(
                 "right_name" => $right_name
             ));
@@ -33,7 +35,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
     case "POST":
         $right_name = $_POST["right_name"];
 
-        if (filter($right_name, ACCESS_RIGHT_FILT)){
+        if (filter($right_name, ACCESS_RIGHT_FILT)
+            && AccessTable::checkAccess($db, ACCESS_RIGHTS, INSERT)){
             $result = $access_rights->insert(array(
                 "right_name" => $right_name
             ));
@@ -59,6 +62,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         if (filter($right_name, ACCESS_RIGHT_FILT)
             && filter($right_id, NUMBER_FILT)
+            && AccessTable::checkAccess($db, ACCESS_RIGHTS, READ)
         ){
             $result = $access_rights->update(array(
                 "right_id" => intval($right_id),
@@ -83,7 +87,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         $right_id = $_DELETE["right_id"];
 
-        if (filter($right_id, NUMBER_FILT)){
+        if (filter($right_id, NUMBER_FILT)
+            && AccessTable::checkAccess($db, ACCESS_RIGHTS, DELETE)){
             $result = $access_rights->remove(intval($right_id));
             http_response_code(intval(FILTER_OK));
         }

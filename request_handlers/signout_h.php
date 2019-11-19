@@ -1,17 +1,13 @@
 <?php
 
+require_once "../models/tables/UserRepository.php";
 require_once "../config.php";
 
+$users = new UserRepository($db);
 
 if ($_SERVER["REQUEST_METHOD"] == 'GET'){
 
-    $sql = "UPDATE users_t SET
-        user_sessid = 0
-        WHERE user_sessid = :sessid";
-    $q = $db->prepare($sql);
-    $q->bindParam(":sessid", $_COOKIE["PHPSESSID"]);
-    $q->execute();
-    $rows = $q->fetchAll();
+    $users->endSess($_COOKIE["PHPSESSID"]);
 
     header('Location: ../');
     exit;

@@ -1,6 +1,7 @@
 <?php
 
 require_once "../models/tables/PhotoCenterRepository.php";
+require_once "../models/AccessTable.php";
 require_once "../models/utils.php";
 
 require_once "../config.php";
@@ -18,6 +19,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["chains_name"], ADDRESS_FILT)
             && filter($filterData["office_hours"], OFFICE_HOURS_FILT)
             && filter($filterData["phone"], PHONE_NUMBER_FILT)
+            && AccessTable::checkAccess($db, PHOTO_CENTERS, READ)
         ){
             $result = $photo_centers->getAllFilter(array(
                 "address" => $filterData["address"],
@@ -49,6 +51,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["chains_name"], ADDRESS_FILT)
             && filter($filterData["office_hours"], OFFICE_HOURS_FILT)
             && filter($filterData["phone"], PHONE_NUMBER_FILT)
+            && AccessTable::checkAccess($db, PHOTO_CENTERS, INSERT)
         ){
             $result = $photo_centers->insert(array(
                 "address" => $filterData["address"],
@@ -84,6 +87,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["office_hours"], OFFICE_HOURS_FILT)
             && filter($filterData["phone"], PHONE_NUMBER_FILT)
             && filter($filterData["pc_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, PHOTO_CENTERS, EDIT)
         ){
             $result = $photo_centers->update(array(
                 "address" => $filterData["address"],
@@ -111,7 +115,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         $filterData["pc_id"] = $_DELETE["pc_id"];
 
-        if (filter($filterData["pc_id"], NUMBER_FILT)){
+        if (filter($filterData["pc_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, PHOTO_CENTERS, DELETE)){
             $result = $photo_centers->remove(intval($filterData["pc_id"]));
             http_response_code(intval(FILTER_OK));
         }

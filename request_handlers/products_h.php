@@ -1,6 +1,7 @@
 <?php
 
 require_once "../models/tables/ProductRepository.php";
+require_once "../models/AccessTable.php";
 require_once "../models/utils.php";
 
 require_once "../config.php";
@@ -15,8 +16,9 @@ switch($_SERVER["REQUEST_METHOD"]) {
         $filterData["product_types_id"] = getData($_GET, "product_types_id", 0);
 
         if (filter($filterData["product_name"], CHARS_ONLY_FILT)
-            && filter($filterData["product_price"], NUMBER_FILT, 1)
-            && filter($filterData["product_types_id"], NUMBER_FILT, 1)
+            && filter($filterData["product_price"], NUMBER_FILT)
+            && filter($filterData["product_types_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, PRODUCTS, READ)
         ){
             $result = $products->getAllFilter(array(
                 "product_name" => $filterData["product_name"],
@@ -43,8 +45,9 @@ switch($_SERVER["REQUEST_METHOD"]) {
         $filterData["product_types_id"] = $_POST["product_types_id"];
 
         if (filter($filterData["product_name"], CHARS_ONLY_FILT)
-            && filter($filterData["product_price"], NUMBER_FILT, 1)
-            && filter($filterData["product_types_id"], NUMBER_FILT, 1)
+            && filter($filterData["product_price"], NUMBER_FILT)
+            && filter($filterData["product_types_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, PRODUCTS, INSERT)
         ) {
             $result = $products->insert(array(
                 "product_name" => $filterData["product_name"],
@@ -74,9 +77,10 @@ switch($_SERVER["REQUEST_METHOD"]) {
         $filterData["product_id"] = $_PUT["product_id"];
 
         if (filter($filterData["product_name"], CHARS_ONLY_FILT)
-            && filter($filterData["product_price"], NUMBER_FILT, 1)
-            && filter($filterData["product_types_id"], NUMBER_FILT, 1)
-            && filter($filterData["product_id"], NUMBER_FILT, 1)
+            && filter($filterData["product_price"], NUMBER_FILT)
+            && filter($filterData["product_types_id"], NUMBER_FILT)
+            && filter($filterData["product_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, PRODUCTS, EDIT)
         ) {
             $result = $products->update(array(
                 "product_name" => $filterData["product_name"],
@@ -103,7 +107,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         $filterData["product_id"] = $_DELETE["product_id"];
 
-        if (filter($filterData["product_id"], NUMBER_FILT)) {
+        if (filter($filterData["product_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, PRODUCTS, DELETE)) {
             $result = $products->remove(intval($filterData["product_id"]));
             http_response_code(intval(FILTER_OK));
         }

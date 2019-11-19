@@ -1,6 +1,7 @@
 <?php
 
 require_once "../models/tables/UserRepository.php";
+require_once "../models/AccessTable.php";
 require_once "../models/utils.php";
 
 require_once "../config.php";
@@ -14,6 +15,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         if (filter($filterData["user_login"], LOGIN_FILT)
             && filter($filterData["user_type"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, USERS, READ)
         ){
             $result = $users->getAllFilter(array(
                 "user_login" => $filterData["user_login"],
@@ -41,6 +43,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
         if (filter($filterData["user_login"], LOGIN_FILT)
             && filter($filterData["user_password"], LOGIN_FILT)
             && filter($filterData["user_type"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, USERS, INSERT)
         ){
             $result = $users->insert(array(
                 "user_login" => $filterData["user_login"],
@@ -72,6 +75,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
         if (filter($filterData["user_login"], LOGIN_FILT)
             && filter($filterData["user_type"], NUMBER_FILT)
             && filter($filterData["user_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, USERS, EDIT)
         ){
             $result = $users->update(array(
                 "user_login" => $filterData["user_login"],
@@ -97,7 +101,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         $filterData["user_id"] = $_DELETE["user_id"];
 
-        if (filter($filterData["user_id"], NUMBER_FILT)){
+        if (filter($filterData["user_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, USERS, DELETE)){
             $result = $users->remove(intval($filterData["user_id"]));
             http_response_code(intval(FILTER_OK));
         }

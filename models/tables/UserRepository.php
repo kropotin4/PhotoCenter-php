@@ -31,6 +31,15 @@ class UserRepository {
         return $this->read($rows[0]);
     }
 
+    public function getByLogin($login) {
+        $sql = "SELECT * FROM users_t WHERE user_login = :login";
+        $q = $this->db->prepare($sql);
+        $q->bindParam(":login", $login);
+        $q->execute();
+        $rows = $q->fetchAll();
+        return $this->read($rows[0]);
+    }
+
     public function getBySessId($id) {
         $sql = "SELECT * FROM users_t WHERE user_sessid = :id";
         $q = $this->db->prepare($sql);
@@ -99,6 +108,25 @@ class UserRepository {
     public function remove($id) {
         $sql = "DELETE FROM users_t WHERE user_id = :id";
         $q = $this->db->prepare($sql);
+        $q->bindParam(":id", $id, PDO::PARAM_INT);
+        $q->execute();
+    }
+
+    public function endSess($sessid){
+        $sql = "UPDATE users_t SET
+        user_sessid = 0
+        WHERE user_sessid = :sessid";
+        $q = $this->db->prepare($sql);
+        $q->bindParam(":sessid", $sessid);
+        $q->execute();
+    }
+
+    public function startSess($id){
+        $sql = "UPDATE users_t SET
+                    user_sessid = :sessid
+                    WHERE user_id = :id";
+        $q = $this->db->prepare($sql);
+        $q->bindParam(":sessid", $_COOKIE["PHPSESSID"]);
         $q->bindParam(":id", $id, PDO::PARAM_INT);
         $q->execute();
     }

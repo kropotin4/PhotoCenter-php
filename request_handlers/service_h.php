@@ -1,6 +1,7 @@
 <?php
 
 require_once "../models/tables/ServiceRepository.php";
+require_once "../models/AccessTable.php";
 require_once "../models/utils.php";
 
 require_once "../config.php";
@@ -21,6 +22,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["customer_id"], NUMBER_FILT)
             && filter($filterData["service_date"], BURTH_DAY_FILT)
             && filter($filterData["service_time"], TIME_FILT)
+            && AccessTable::checkAccess($db, SERVICES, READ)
         ){
             $result = $services->getAllFilter(array(
                 "consultant_id" => $filterData["consultant_id"],
@@ -55,6 +57,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["customer_id"], NUMBER_FILT)
             && filter($filterData["service_date"], BURTH_DAY_FILT)
             && filter($filterData["service_time"], TIME_FILT)
+            && AccessTable::checkAccess($db, SERVICES, INSERT)
         ){
             $result = $services->insert(array(
                 "consultant_id" => $filterData["consultant_id"],
@@ -93,6 +96,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($filterData["service_date"], BURTH_DAY_FILT)
             && filter($filterData["service_time"], TIME_FILT)
             && filter($filterData["service_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, SERVICES, EDIT)
         ){
             $result = $services->update(array(
                 "consultant_id" => $filterData["consultant_id"],
@@ -121,7 +125,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         $filterData["service_id"] = $_DELETE["service_id"];
 
-        if (filter($filterData["service_id"], NUMBER_FILT)){
+        if (filter($filterData["service_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, SERVICES, DELETE)){
             $result = $services->remove(intval($filterData["service_id"]));
             http_response_code(intval(FILTER_OK));
         }

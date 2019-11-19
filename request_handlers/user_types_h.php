@@ -1,6 +1,7 @@
 <?php
 
 require_once "../models/tables/UserTypeRepository.php";
+require_once "../models/AccessTable.php";
 require_once "../models/utils.php";
 
 require_once "../config.php";
@@ -26,6 +27,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($service_t, NUMBER_FILT)
             && filter($users_t, NUMBER_FILT)
             && filter($user_types_t, NUMBER_FILT)
+            && AccessTable::checkAccess($db, USER_TYPES, READ)
         ){
             $result = $user_types->getAllFilter(array(
                 "consultants_t" => $consultants_t,
@@ -70,6 +72,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($service_t, NUMBER_FILT)
             && filter($users_t, NUMBER_FILT)
             && filter($user_types_t, NUMBER_FILT)
+            && AccessTable::checkAccess($db, USER_TYPES, INSERT)
         ){
             $result = $user_types->insert(array(
                 "consultants_t" => $consultants_t,
@@ -117,6 +120,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
             && filter($service_t, NUMBER_FILT)
             && filter($users_t, NUMBER_FILT)
             && filter($user_types_t, NUMBER_FILT)
+            && AccessTable::checkAccess($db, USER_TYPES, EDIT)
         ){
             $result = $user_types->update(array(
                 "user_type_id" => $user_type_id,
@@ -148,7 +152,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         $user_type_id = $_DELETE["user_type_id"];
 
-        if (filter($user_type_id, NUMBER_FILT)){
+        if (filter($user_type_id, NUMBER_FILT)
+            && AccessTable::checkAccess($db, USER_TYPES, DELETE)){
             $result = $user_types->remove(intval($user_type_id));
             http_response_code(intval(FILTER_OK));
         }

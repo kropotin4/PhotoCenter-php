@@ -66,13 +66,13 @@ if ($user->user_val){
         ),
         array('{$user_login}' => $user->user_login)
     );
-
-    require_once "models/AccessTable.php";
-    Notice::createAndPushNote("Access: " . AccessTable::checkAccess($db, 0, DELETE));
-
 }
 else {
     $sign_panel = file_get_contents("public/templates/sign_panel.html");
 }
+
+require_once "models/tables/UserTypeRepository.php";
+require_once "models/BarLinkGenerater.php";
+$bar_links = BarLinkGenerater::gen((new UserTypeRepository($db))->getById($user->user_type));
 
 require_once "public/templates/index2.html";

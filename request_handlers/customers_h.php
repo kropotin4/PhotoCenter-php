@@ -17,6 +17,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         if (filter($filterData["full_name"], FULL_NAME_FILT)
             && filter($filterData["age"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, CUSTOMERS, READ)
         ){
             $result = $customers->getAllFilter(array(
                 "full_name" => $filterData["full_name"],
@@ -42,6 +43,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         if (filter($filterData["full_name"], FULL_NAME_FILT)
             && filter($filterData["age"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, CUSTOMERS, INSERT)
         ){
             $result = $customers->insert(array(
                 "full_name" => $filterData["full_name"],
@@ -71,6 +73,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
         if (filter($filterData["full_name"], FULL_NAME_FILT)
             && filter($filterData["age"], NUMBER_FILT)
             && filter($filterData["customer_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, CUSTOMERS, EDIT)
         ){
             $result = $customers->update(array(
                 "customer_id" => intval($filterData["customer_id"]),
@@ -96,7 +99,8 @@ switch($_SERVER["REQUEST_METHOD"]) {
 
         $filterData["customer_id"] = $_DELETE["customer_id"];
 
-        if (filter($filterData["customer_id"], NUMBER_FILT)){
+        if (filter($filterData["customer_id"], NUMBER_FILT)
+            && AccessTable::checkAccess($db, CUSTOMERS, DELETE)){
             $result = $customers->remove(intval($filterData["customer_id"]));
             http_response_code(intval(FILTER_OK));
         }
